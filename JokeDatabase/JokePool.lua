@@ -25,6 +25,10 @@ local function initializeSavedVariables()
     if type(JokeDatabaseSaved.totalJokesPosted) ~= "number" then
         JokeDatabaseSaved.totalJokesPosted = 0
     end
+
+    if type(JokeDatabaseSaved.recentJokeCount) ~= "number" then
+        JokeDatabaseSaved.recentJokeCount = 0
+    end
 end
 
 -- Rebuilds the in-memory joke pool from all jokes, excluding recently used jokes when tracking is enabled.
@@ -44,6 +48,7 @@ local function rebuildAvailableJokePool()
 
     if #available == 0 and #jokes > 0 then
         JokeDatabaseSaved.recentlyUsedJokes = {}
+        JokeDatabaseSaved.recentJokeCount = 0
         for _, joke in ipairs(jokes) do
             table.insert(available, joke)
         end
@@ -55,6 +60,7 @@ end
 -- Clears persisted tracking state so joke selection can restart from a full pool.
 local function resetTrackingHistory()
     JokeDatabaseSaved.recentlyUsedJokes = {}
+    JokeDatabaseSaved.recentJokeCount = 0
     rebuildAvailableJokePool()
 end
 
@@ -75,6 +81,8 @@ local function selectJoke()
     if JokeDatabaseSaved.trackingEnabled then
         if not JokeDatabaseSaved.recentlyUsedJokes[selectedJoke] then
             JokeDatabaseSaved.recentlyUsedJokes[selectedJoke] = true
+            JokeDatabaseSaved.recentJokeCount = JokeDatabaseSaved.recentJokeCount + 1
+            JokeDatabaseSaved.totalJokesPosted = JokeDatabaseSaved.totalJokesPosted + 1
         end
     end
 
@@ -94,11 +102,10 @@ local function postJoke(channelName)
     end
 
     C_ChatInfo.SendChatMessage(selectedJoke, channelName)
-    JokeDatabaseSaved.totalJokesPosted = JokeDatabaseSaved.totalJokesPosted + 1
 
     if JokeDatabaseSaved.printStatusOnJoke then
         local totalJokeCount = #addonTable.jokeList
-        print("JokeDatabase: Recently used jokes " .. #JokeDatabaseSaved.recentlyUsedJokes .. "/" .. totalJokeCount .. ".")
+        print("JokeDatabase: Recently used jokes " .. JokeDatabaseSaved.recentJokeCount .. "/" .. totalJokeCount .. ".")
         print("JokeDatabase: Total jokes posted " .. JokeDatabaseSaved.totalJokesPosted .. ".")
     end
 end

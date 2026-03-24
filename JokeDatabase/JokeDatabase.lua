@@ -168,7 +168,7 @@ local function processSlashCommand(messageText)
     end
 
     if command == "status" then
-        local usedCount = #JokeDatabaseSaved.recentlyUsedJokes
+        local usedCount = JokeDatabaseSaved.recentJokeCount
         local totalCount = #addonTable.jokeList
         local trackingState = JokeDatabaseSaved.trackingEnabled and "enabled" or "disabled"
         print("JokeDatabase: Tracking is " .. trackingState .. ".")
