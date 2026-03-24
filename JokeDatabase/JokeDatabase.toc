@@ -1,0 +1,10 @@
+## Interface: 120001
+## Title: JokeDatabase
+## Notes: Posts a random joke on wipes and group joke requests.
+## Author: TheQuibbler
+## Version: 1.0.0
+## SavedVariables: JokeDatabaseSaved
+
+Jokes.lua
+JokePool.lua
+JokeDatabase.lua
