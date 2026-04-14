@@ -1,4 +1,4 @@
-## Interface: 120001
+## Interface: 120005
 ## Title: JokeDatabase
 ## Notes: Posts a random joke on wipes and group joke requests.
 ## Author: TheQuibbler
